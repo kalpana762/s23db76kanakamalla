@@ -4,13 +4,55 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+require('dotenv').config();
+const connectionString =
+process.env.MONGO_CON
+mongoose = require('mongoose');
+mongoose.connect(connectionString);
+
+var db = mongoose.connection;
+//Bind connection to error event
+db.on('error', console.error.bind(console, 'MongoDB connectionerror:'));
+db.once("open", function(){
+console.log("Connection to DB succeeded")});
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var parrotRouter = require('./routes/parrot');
 var boardRouter = require('./routes/board');
 var chooseRouter = require('./routes/choose');
+var parrot = require("./models/parrot");
+var resourceRouter = require('./routes/resource');
 
 var app = express();
+
+async function recreateDB(){
+  // Delete everything
+  await parrot.deleteMany();
+  let instance1 = new
+  parrot({parrot_color:"grey",parrot_breed:"African grey parrot",parrot_price:4000});
+  let instance2 = new
+  parrot({parrot_color:"green",parrot_breed:"Eclectus parrot",parrot_price:5000});
+  let instance3 = new
+  parrot({parrot_color:"white",parrot_breed:"Cockatiel",parrot_price:6000});
+  instance1.save().then(doc=>{
+  console.log("First object saved")}
+  ).catch(err=>{
+  console.error(err)
+  });
+  instance2.save().then(doc=>{
+    console.log("second object saved")}
+    ).catch(err=>{
+    console.error(err)
+    });
+    instance3.save().then(doc=>{
+      console.log("third object saved")}
+      ).catch(err=>{
+      console.error(err)
+      });
+  }
+  let reseed = true;
+  if (reseed) {recreateDB();}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -27,10 +69,16 @@ app.use('/users', usersRouter);
 app.use('/parrot', parrotRouter);
 app.use('/board', boardRouter);
 app.use('/choose', chooseRouter);
+app.use('/resource', resourceRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
+});
+
+// catch 500 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(500));
 });
 
 // error handler
