@@ -10,10 +10,25 @@ exports.parrot_list = async function(req, res) {
     res.send(`{"error": ${err}}`);
     }    
 };
+
+
+
 // for a specific parrot.
-exports.parrot_detail = function(req, res) {
-res.send('NOT IMPLEMENTED: parrot detail: ' + req.params.id);
+exports.parrot_detail = async function(req, res) {
+console.log("detail" + req.params.id)
+try {
+result = await parrot.findById( req.params.id)
+res.send(result)
+} catch (error) {
+res.status(500)
+res.send(`{"error": document for id ${req.params.id} not found`);
+}
 };
+
+
+
+
+
 // Handle parrot create on POST.
 exports.parrot_create_post = function(req, res) {
 res.send('NOT IMPLEMENTED: parrot create POST');
