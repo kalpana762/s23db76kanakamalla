@@ -6,3 +6,8 @@ body {
 a {
   color: #00B7FF;
 }
+.parrotAttr {
+  background-color: rgb(202, 127, 255);
+  width: 120px;
+  }
+  

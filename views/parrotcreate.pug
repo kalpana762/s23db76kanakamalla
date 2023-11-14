@@ -1,0 +1,28 @@
+extends layout
+block content
+ h1= title
+ form(id='parrotForm', action="/resource/parrots", method="POST")
+  div.form-group
+   label.parrotAttr(for='parrot_color') parrot Color
+   input#parrot_color(type='text', name='parrot_color')
+  div.form-group
+   label.parrotAttr(for='parrot_breed') parrot Breed
+   input#parrot_breed(type='text', name='parrot_breed')
+  div.form-group
+   label.parrotAttr(for='parrot_price') parrot Cost 
+   input#parrot_price(type='text', name='parrot_price')
+  input(type="submit")
+ script.
+  document.forms['parrotForm'].addEventListener('submit', (event) => {
+    event.preventDefault();
+    fetch(event.target.action, {
+        method: 'POST',
+        body: new URLSearchParams(new FormData(event.target)) 
+    }).then((resp) => {
+        return resp.json();
+    }).then((body) => {
+        alert("Save succeded")
+    }).catch((error) => {
+        alert("Save failed " + error )
+    });
+   }); 

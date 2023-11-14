@@ -1,0 +1,57 @@
+extends layout
+
+block content
+  h1= title
+
+  if(toShow == null)
+    h2 No instance to update
+  else
+    - let parrotid = toShow._id
+    - let parrot_color = toShow.parrot_color
+    - let parrot_breed = toShow.parrot_breed
+    - let parrot_price = toShow.parrot_price
+    - let actionid = "/resource/parrots/" + parrotid
+    script let actionid = "#{actionid}"
+    div.row(class='mb-2')
+    div.mr-1 ID is 
+      span(style="color:red")  #{parrotid}
+    form(id='parrotForm', action= actionid, method="PUT")
+      div.form-group
+      div(class="row g-3 align-items-center")
+        div(class="col-1")
+          label.parrotAttr(for='parrot_color',class="col-form-label") parrot Colour
+        div(class="col-auto")
+          input#parrot_color(type='text', name='parrot_color',class="form-control", value=parrot_color)
+      div.form-group
+      div(class="row g-3 align-items-center")
+        div(class="col-1")
+          label.parrotAttr(for='parrot_breed',class="col-form-label") parrot Breed 
+        div(class="col-auto")
+          input#parrot_breed(type='text', name='parrot_breed',class="form-control", value=parrot_breed)
+      div.form-group
+      div(class="row g-3 align-items-center")
+        div(class="col-1")
+          label.parrotAttr(for='parrot_price',class="col-form-label") parrot cost
+        div(class="col-auto")
+          input#parrot_price(type='number', name='parrot_price',class="form-control", value=parrot_price)
+      input(class="btn btn-danger m-2" type="submit")
+        //- button(class="btn btn-danger m-2" onclick="deleteOnid()") Delete
+      button(class="btn btn-secondary m-2" onclick="cancel()") Cancel
+    
+    script.
+      document.forms['parrotForm'].addEventListener('submit', (event) => {
+       event.preventDefault();
+      // TODO do something here to show user that form is being submitted
+       fetch(event.target.action, {
+        method: 'PUT',
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+        }).then((resp) => {
+        return resp.json(); // or resp.text() or whatever the server sends
+        }).then((body) => {
+        alert("Update succeded")
+        // TODO handle body
+        }).catch((error) => {
+        // TODO handle error
+        alert("Update failed " + error )
+       });
+      });
