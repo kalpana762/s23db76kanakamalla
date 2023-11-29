@@ -18,10 +18,10 @@ const secured = (req, res, next) => {
   }
 /* GET parrots */
 router.get('/', parrot_controlers.parrot_view_all_Page );
-router.get('/detail', parrot_controlers.parrot_view_one_Page);
-router.get('/create', parrot_controlers.parrot_create_Page);
+router.get('/detail',secured, parrot_controlers.parrot_view_one_Page);
+router.get('/create',secured, parrot_controlers.parrot_create_Page);
 router.get('/update',secured, parrot_controlers.parrot_update_Page);
-router.get('/delete', parrot_controlers.parrot_delete_Page);
+router.get('/delete',secured, parrot_controlers.parrot_delete_Page);
 
 
 module.exports = router;
